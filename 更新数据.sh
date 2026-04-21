@@ -1,31 +1,31 @@
 #!/bin/zsh
 set -euo pipefail
 
-项目目录="$(cd "$(dirname "$0")" && pwd)"
-下载目录="/Users/zijiehe/Downloads"
-今天="$(date +%F)"
+PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
+DOWNLOAD_DIR="/Users/zijiehe/Downloads"
+TODAY="$(date +%F)"
 
-源板块="$下载目录/t-$今天.csv"
-源个股="$下载目录/t-$今天 (1).csv"
-目标板块="$项目目录/data/板块.csv"
-目标个股="$项目目录/data/个股.csv"
+SRC_SECTOR="$DOWNLOAD_DIR/t-$TODAY.csv"
+SRC_COMPANY="$DOWNLOAD_DIR/t-$TODAY (1).csv"
+DST_SECTOR="$PROJECT_DIR/data/板块.csv"
+DST_COMPANY="$PROJECT_DIR/data/个股.csv"
 
-if [[ ! -f "$源板块" ]]; then
-  echo "缺少文件: $源板块"
+if [[ ! -f "$SRC_SECTOR" ]]; then
+  echo "缺少文件: $SRC_SECTOR"
   exit 1
 fi
 
-if [[ ! -f "$源个股" ]]; then
-  echo "缺少文件: $源个股"
+if [[ ! -f "$SRC_COMPANY" ]]; then
+  echo "缺少文件: $SRC_COMPANY"
   exit 1
 fi
 
-cp "$源板块" "$目标板块"
-cp "$源个股" "$目标个股"
+cp "$SRC_SECTOR" "$DST_SECTOR"
+cp "$SRC_COMPANY" "$DST_COMPANY"
 
-cd "$项目目录"
+cd "$PROJECT_DIR"
 python build_site.py
 
 git add data/板块.csv data/个股.csv site/index.html
-git commit -m "更新 $今天 数据" || echo "没有变化，无需提交"
+git commit -m "更新 $TODAY 数据" || echo "没有变化，无需提交"
 git push
